@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,16 @@ import {
   TextInput,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export default function SingleTodo({ todo, setTodos, todos }) {
   const [edit, setEdit] = useState(false);
   const [editText, setEditText] = useState(todo.text);
+
+  useEffect(() => {
+    AsyncStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const handleEdit = () => {
     if (!edit) setEdit(!edit);
@@ -26,6 +32,7 @@ export default function SingleTodo({ todo, setTodos, todos }) {
             : t
         )
       );
+      AsyncStorage.setItem("todos", JSON.stringify(todos));
     }
   };
 

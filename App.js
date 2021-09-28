@@ -1,5 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import {
   View,
   Text,
@@ -21,6 +22,15 @@ const App = () => {
     setTodo("");
   };
 
+  const fetchTodos = async () => {
+    const data = await AsyncStorage.getItem("todos");
+    if (data) setTodos(JSON.parse(data));
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>ToDo Application</Text>
@@ -36,7 +46,7 @@ const App = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={{width:"100%" , marginTop:10}}>
+      <View style={{ width: "100%", marginTop: 10 }}>
         <FlatList
           data={todos}
           renderItem={({ item }) => (
@@ -60,6 +70,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7DAD9",
   },
   heading: {
+    marginTop:50,
     marginVertical: 12,
     fontSize: 30,
     fontWeight: "700",
